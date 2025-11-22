@@ -18,7 +18,16 @@ pipeline {
                 sh "docker build -t sagarwa/zomatoapp:1.0 ."
             }
         }
-        
+        stage ("Tag & Push to DockerHub") {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'docker-login', passwordVariable: 'dockerhubpass', usernameVariable: 'dockerhublogin')]) {
+                        sh "docker login -u ${dockerhublogin} -p ${dockerhubpass}"
+                        sh "docker push sagarwa/zomatoapp:1.0 "
+                    }
+                }
+            }
+        }
     }
 }
         
